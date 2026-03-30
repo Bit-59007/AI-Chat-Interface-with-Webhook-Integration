@@ -1,0 +1,163 @@
+{
+  "name": "Webhook & Loveable",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "My Website",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -96,
+        -80
+      ],
+      "id": "f3aebc7a-3e0f-495f-b574-67342c35721e",
+      "name": "Webhook",
+      "webhookId": "34d05f1d-07a0-4ddb-9356-cd6a41cb91c6"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        608,
+        -48
+      ],
+      "id": "07ce61b7-0ecf-4c40-8210-2b6514a686d2",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app7L0bGLZeUv7bDB",
+          "mode": "list",
+          "cachedResultName": "My First Table",
+          "cachedResultUrl": "https://airtable.com/app7L0bGLZeUv7bDB"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblfTiAFewzVHANIM",
+          "mode": "list",
+          "cachedResultName": "Customer  feedback Compliant",
+          "cachedResultUrl": "https://airtable.com/app7L0bGLZeUv7bDB/tblfTiAFewzVHANIM"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.2,
+      "position": [
+        384,
+        96
+      ],
+      "id": "7efe34cb-6172-469c-992e-6907ce3f528d",
+      "name": "Search records in Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "gSKUssWTeFFetjDk",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=your a best agent give reply to this message : {{ $json.body.message }} if customer ask any question related to my airtable then give them all correct details after searching from airtable\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        176,
+        -80
+      ],
+      "id": "fc73630b-cd9d-4f4b-a1b6-bf2352163a69",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "deepseek/deepseek-chat-v3.1",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        48,
+        128
+      ],
+      "id": "53f9be28-5e41-4568-b8e5-3117e93324e4",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "Cw7JC771gFsU3ayD",
+          "name": "OpenRouter account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Airtable": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c7f87861-8a3e-4d44-a19c-0f1098a0a997",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0454814d4ab80855dcb2d4b2f2a396f7cea09e6f9d717e8d8181e3bbb14a19a5"
+  },
+  "id": "KUTMgruORd0TzdqQ",
+  "tags": []
+}
